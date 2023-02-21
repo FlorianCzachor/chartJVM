@@ -4,8 +4,11 @@ import io.data2viz.charts.chart.mark.MarkCurves
 import io.data2viz.charts.chart.mark.line
 import io.data2viz.charts.chart.mark.plot
 import io.data2viz.charts.chart.quantitative
+import io.data2viz.charts.core.LayoutPosition
+import io.data2viz.charts.core.MarkLabel
 import io.data2viz.color.Colors
 import io.data2viz.geom.Size
+import io.data2viz.math.ticks
 import io.data2viz.shape.Symbols
 import io.data2viz.viz.newVizContainer
 import javafx.application.Application
@@ -13,25 +16,11 @@ import javafx.scene.Scene
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
 
-import org.w3c.fetch.Response
-import kotlinx.browser.window
-import kotlin.js.Promise
-
 private val width = 800.0
 private val height = 500.0
 
-private val valuex = listOf(1.0, 2.0, 3.0, 4.0, 5.0)
-
-data class Weather(
-    val month: Int,
-    val avgTemp: Double)
-
-private fun parseWeather(row: List<String>) = Weather(
-    row[0].toInt(),
-    row[1].toDouble()
-)
-
-private val months = listOf("Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec.")
+val values = listOf(1.0, 2.0, 3.0, 4.0, 5.0)
+//val values2 = listOf(2.0, 3.0, 4.0, 5.0, 3.0)
 
 fun main() {
     Application.launch(MyFirstChart::class.java)
@@ -50,48 +39,37 @@ class MyFirstChart: Application() {
             // Size the VizContainer
             size = Size(width, height)
 
-            val request: Promise<Response> =
-                window.fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTX4QuCNyDvUoAwk6Jl6UJ4r336A87VIKQ5BVyEgowXG_raXdFBMvmUhmz1LLc07GavyC9J6pZ4YHqJ/pub?gid=650761999&single=true&output=csv")
+            // Create a first simple Chart
+            chart(values) {
+                val values = quantitative({domain})
+                //val values2 = quantitative({domain.values2})
 
-            request.then {
-                it.text().then {
+                config {
+                    yAxis { enableAxis = false }
+                    xAxis { enableAxis = false }
+                    mark { label = MarkLabel.XY }
 
-                    // Parse all result, keep only one city and one year
-                    val results = Dsv()
-                        .parseRows(it)
-                        .drop(1)
-                        .map { parseWeather(it) }
+                }
 
-                    // Create a first simple Chart
-                    chart(values) {
-                        val values = quantitative({domain.valuex})
+                line(values, values) {
 
-                        line(valuex, valuey) {
+                    curve = MarkCurves.Curved
+                    size = constant(30.0)
+                    marker = constant(Symbols.Circle)
+                    showMarkers = true
 
-                            curve = MarkCurves.Curved
-                            size = constant(30.0)
-                            marker = constant(Symbols.Circle)
-                            showMarkers = true
-
-                            strokeColor = constant(Colors.Web.black)
-                            strokeColorHighlight = constant(Colors.Web.black)
-                            strokeWidth = constant(2.0)
-
-                            y {
-                                start = .0
-                                end = 80.0
-                            }
-                        }
-                    }
+                    strokeColor = constant(Colors.Web.black)
+                    strokeColorHighlight = constant(Colors.Web.black)
+                    strokeWidth = constant(2.0)
                 }
             }
+        }
 
-            // Launch our Scene
-            stage.apply {
-                title = "My first chart!"
-                scene = (Scene(root, width, height))
-                show()
-            }
+        // Launch our Scene
+        stage.apply {
+            title = "My first chart!"
+            scene = (Scene(root, width, height))
+            show()
         }
     }
 }

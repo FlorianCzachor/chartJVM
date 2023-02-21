@@ -5,7 +5,6 @@ plugins {
     kotlin("jvm") version "1.8.0"
     application
     id("org.openjfx.javafxplugin") version "0.0.9"
-    kotlin("js") version "1.8.10"
 }
 
 javafx {
@@ -30,8 +29,6 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation ("io.data2viz.d2v:core-jvm:$d2vVersion")
     implementation ("io.data2viz.charts:core:$chartsVersion")
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib-js:1.8.0")
-    implementation ("org.jetbrains.kotlin:kotlin-browser:1.8.0")
 }
 
 tasks.test {
