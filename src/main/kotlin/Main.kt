@@ -29,9 +29,10 @@ private val width = 800.0
 private val height = 300.0
 
 // Graph Marks Values
-// TODO: Petra Suggested "Triple" for x, y and data parameters
-// https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-triple/
-val values = listOf(Triple(2.0, 1.0, "5A"), Triple(2.0, 2.0, "4C") , Triple(3.0, 3.0, "4B"), Triple(4.0, 4.0, "4B"))
+val values = listOf(Triple(2.0, 1.0, "5A"),
+                    Triple(2.0, 2.0, "4C"),
+                    Triple(3.0, 3.0, "4B"),
+                    Triple(4.0, 4.0, "4B"))
 
 fun main() {
     Application.launch(MyFirstChart::class.java)
@@ -54,14 +55,13 @@ class MyFirstChart : Application() {
             chart(values) {
                 val values1 = quantitative({domain.first})
                 val values2 = discrete({domain.second})
-                val values3 = discrete({domain.third})
 
-                val startYear = 2019 - 1
+                // val startYear = 2019 - 1
 
                 // Config to disable x and y Axis
                 config {
-                    yAxis { enableAxis = false }
-                    xAxis { enableAxis = false }
+                    //yAxis { enableAxis = false }
+                    //xAxis { enableAxis = false }
                     events {
                         highlightMode = HighlightMode.None
                     }
@@ -80,7 +80,7 @@ class MyFirstChart : Application() {
                         end = 10.0
                     }
                     x {
-                        start = .0
+                        start = 0.0
                         end = 10.0
                     }
 
@@ -117,21 +117,21 @@ class MyFirstChart : Application() {
                             strokeColorHighlight = constant(Colors.rgb(48,89,130))
                             strokeWidth = 2.0
                         }
-                        // Text for Above the Mark
+
+                        // Label/Text for Above the Mark
                         drawingZone.text {
                             x = position.x
                             y = position.y - 25.0
                             vAlign = TextVAlign.MIDDLE
                             hAlign = TextHAlign.MIDDLE
                             fontSize = 16.0
-                            // TODO: Data for textContent
                             textContent = datum.domain.third
-                            // 5A   4C 4B 4A   3C 3B 3A   2C 2B 2A   1C 1B 1A the higher it goes
                             // TODO: Add George Font
                             fontWeight = FontWeight.BOLD
                             textColor = Colors.rgb(0,56,95)
                         }
-                        // Teyt for Below the Mark
+
+                        // Label/Text for Below the Mark
                         drawingZone.text {
                             x = position.x
                             y = position.y + 35.0
@@ -164,6 +164,7 @@ class MyFirstChart : Application() {
             try {
                 val writableImage = WritableImage(800, 300)
                 root.snapshot(null, writableImage)
+                // TODO: Save Canvas to Bytecode and then encode with base64
                 /*
                 numpydata = asarray(root)
                 writeImageToArray
